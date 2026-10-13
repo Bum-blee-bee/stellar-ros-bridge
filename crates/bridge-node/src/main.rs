@@ -1,11 +1,12 @@
-//! Command-line entry point for Stellar ROS Bridge.
+﻿//! Command-line entry point for Stellar ROS Bridge.
 
 use std::env;
 use std::error::Error;
 use std::io;
 use std::path::PathBuf;
 
-fn main() -> Result<(), Box<dyn Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
     let mut args = env::args().skip(1);
     let mut params_file: Option<PathBuf> = None;
 
@@ -60,6 +61,25 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("proofs_topic={}", config.proofs_topic);
     println!("ros_domain_id={}", config.ros_domain_id);
     println!("ROS_DOMAIN_ID={}", env::var("ROS_DOMAIN_ID")?);
+
+    let address = env::var("HEALTH_ADDR").unwrap_or_else(|_| "0.0.0.0:8080".to_owned());
+    let listener = match tokio::net::TcpListener::bind(&address).await {
+        Ok(listener) => listener,
+        Err(error) => {
+            tracing::error!(%address, %error, "Failed to bind health server");
+            return Err(Box::<dyn Error>::from(error));
+        }
+    };
+
+    tracing::info!(
+        version = bridge_node::VERSION,
+        %address,
+        "Stellar ROS Bridge health server started"
+    );
+
+    // Dependency checks are not wired into the current scaffolding yet.
+    let state = bridge_node::health::HealthState::new(true);
+    axum::serve(listener, bridge_node::health::router(state)).await?;
 
     Ok(())
 }
