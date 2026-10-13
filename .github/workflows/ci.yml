@@ -6,6 +6,7 @@ on:
   pull_request:
 
 env:
+  RUSTUP_TOOLCHAIN: stable
   CARGO_TERM_COLOR: always
   RUSTFLAGS: -D warnings
 
