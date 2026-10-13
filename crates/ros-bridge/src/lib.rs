@@ -4,5 +4,7 @@
 //! tracked by the "ROS 2 rclrs transport" Wave issue. Building with `--features
 //! ros` will require a sourced ROS 2 (Jazzy+) environment.
 
+pub mod config;
+
 /// The crate version, sourced from `Cargo.toml`.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

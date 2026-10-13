@@ -106,3 +106,19 @@ before starting; unassigned PRs may be closed to keep the sprint fair.
 ## License
 
 Apache-2.0. See [`LICENSE`](LICENSE).
+
+## ROS bridge parameters
+
+The ROS bridge configuration module supports ROS 2 YAML parameter files. The
+example defaults are in `config/ros-bridge-params.yaml`:
+
+- `capabilities_topic`: `/robot/capabilities`
+- `tasks_topic`: `/robot/tasks`
+- `proofs_topic`: `/robot/proofs`
+- `ros_domain_id`: `0` (valid range: 0–232)
+
+Use a copy of the example file to customize these values for your deployment.
+The `ros-bridge` configuration parser can be tested without a ROS 2
+installation. The current repository still has ROS transport scaffolding only;
+a running ROS node must load this configuration when the transport is
+implemented.
