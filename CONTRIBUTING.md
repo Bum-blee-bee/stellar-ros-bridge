@@ -82,3 +82,19 @@ privately (see `SECURITY.md` once published) so a fix can be prepared first.
 
 By contributing, you agree your contributions are licensed under
 **Apache-2.0** as described in [`LICENSE`](LICENSE).
+
+## Common developer commands
+
+Install [just](https://just.systems/) before using these shortcuts. Run commands from the repository root.
+
+| Command | Purpose |
+| --- | --- |
+| `just build` | Build the workspace. |
+| `just test` | Run workspace tests. |
+| `just lint` | Run Clippy for all workspace targets and deny warnings. |
+| `just fmt` | Check Rust formatting without changing files. |
+| `just docs` | Generate workspace documentation without dependencies. |
+| `just deny` | Run `cargo deny check` (requires `cargo-deny` and its configuration). |
+| `just clean` | Remove generated Cargo build artifacts. |
+
+The recipes wrap the corresponding Cargo commands so contributors can use one consistent entry point.
