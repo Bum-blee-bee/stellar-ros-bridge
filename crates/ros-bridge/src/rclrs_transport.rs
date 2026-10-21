@@ -12,12 +12,12 @@ use std::sync::{Arc, Mutex};
 use std::thread::{self, JoinHandle};
 
 use bridge_core::{Capability, Proof, Task, Transport, TransportError};
-use rclrs::dynamic_message::{
-    DynamicMessage, DynamicMessageMetadata, DynamicPublisher, DynamicSubscription, MessageTypeName,
-    SimpleValue, SimpleValueMut, Value, ValueMut,
-};
 use rclrs::rosidl_runtime_rs::String as RosString;
-use rclrs::{Context, CreateBasicExecutor, ExecutorCommands, InitOptions, Node, SpinOptions};
+use rclrs::{
+    Context, CreateBasicExecutor, DynamicMessage, DynamicMessageMetadata, DynamicPublisher,
+    DynamicSubscription, ExecutorCommands, InitOptions, MessageTypeName, Node, SimpleValue,
+    SimpleValueMut, SpinOptions, Value, ValueMut,
+};
 
 use crate::config::NodeConfig;
 use crate::{TaskExecutor, UnsupportedExecutor};
