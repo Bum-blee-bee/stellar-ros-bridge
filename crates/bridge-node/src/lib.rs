@@ -1,12 +1,15 @@
 ﻿//! Runtime library for Stellar ROS Bridge.
 //!
-//! Scaffolding for the runtime task lifecycle and its wiring of a `Transport`
-//! to a `Settlement` is tracked by the task-lifecycle work.
+//! [`driver::BridgeNode`] wires a ROS transport to Stellar settlement and
+//! drives the accept -> execute -> prove -> settle lifecycle.
 
 use ros_bridge::config::NodeConfig;
 use std::error::Error;
 use std::path::Path;
 
+/// The task lifecycle driver lives in `bridge-core` so it can be tested
+/// without ROS 2 or Stellar dependencies.
+pub use bridge_core::driver;
 /// Health and readiness endpoints for the node.
 pub mod health;
 

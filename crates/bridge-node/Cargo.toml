@@ -10,6 +10,7 @@ rust-version.workspace = true
 [dependencies]
 bridge-core = { workspace = true }
 ros-bridge = { workspace = true }
+serde_json = { workspace = true }
 stellar-bridge = { workspace = true }
 tracing = { workspace = true }
 

@@ -79,6 +79,7 @@ name = "bridge-core"
 version = "0.1.0"
 dependencies = [
  "serde",
+ "serde_json",
  "thiserror",
 ]
 
@@ -89,6 +90,7 @@ dependencies = [
  "axum",
  "bridge-core",
  "ros-bridge",
+ "serde_json",
  "stellar-bridge",
  "tokio",
  "tower",
