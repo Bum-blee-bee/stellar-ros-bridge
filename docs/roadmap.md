@@ -3,27 +3,27 @@
 This is a phased plan. Each milestone lists the outcome, not a date. Work is
 sliced into Wave-sized issues in `.wave/issues.md`.
 
-## M0 — Foundation (current)
+## M0 — Foundation (done)
 
 **Outcome:** a compiling workspace with a stable domain model and CI.
 
-- [ ] `bridge-core` domain types + error model with round-trip tests
-- [ ] Repository scaffolding, CI (fmt/clippy/test), label + issue process
-- [ ] Documented architecture and local dev setup
+- [x] `bridge-core` domain types + error model with round-trip tests
+- [x] Repository scaffolding, CI (fmt/clippy/test), label + issue process
+- [x] Documented architecture and local dev setup
 
 ## M1 — Task lifecycle off-chain
 
 **Outcome:** the whole task lifecycle works with mocks — no chain, no robot.
 
-- [ ] `Transport` and `Settlement` traits
-- [ ] `bridge-node` state machine (`Announced → … → Settled`) with unit tests
-- [ ] Mock transport + mock settlement used in integration tests
+- [x] `Transport` and `Settlement` traits
+- [x] `bridge-node` state machine (`Announced → … → Settled`) with unit tests
+- [x] Mock transport + mock settlement used in integration tests
 
 ## M2 — Stellar settlement
 
 **Outcome:** a task can be escrowed and released on **testnet**.
 
-- [ ] `TaskEscrow` Soroban contract with the invariants from `architecture.md`
+- [x] `TaskEscrow` Soroban contract with the invariants from `architecture.md`
 - [ ] `stellar-bridge` client: create/accept/proof/release/refund
 - [ ] Testnet bootstrap script (account + friendbot + deploy)
 - [ ] End-to-end test against a local Soroban sandbox

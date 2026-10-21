@@ -7,7 +7,6 @@
 
 [![CI](https://github.com/Primex-tech-labs/stellar-ros-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/Primex-tech-labs/stellar-ros-bridge/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Stellar Wave](https://img.shields.io/badge/Stellar%20Wave-eligible-7c3aed.svg)](https://www.drips.network/wave/stellar)
 
 ## Why this exists
 
@@ -60,35 +59,53 @@ See [`docs/architecture.md`](docs/architecture.md) for the full design and
 
 ```
 crates/
-  bridge-core/      # Domain types, traits, error model (no I/O)
-  ros-bridge/       # ROS 2 integration via rclrs
-  stellar-bridge/   # Soroban/Stellar RPC client + escrow bindings
-  bridge-node/      # Binary that wires the crates together
+  bridge-core/      # Domain types, state machine, driver, mocks (no I/O)
+  ros-bridge/       # ROS 2 configuration (rclrs transport next)
+  stellar-bridge/   # Soroban/Stellar RPC client (next)
+  bridge-node/      # Binary: config, demo lifecycle, health server
+contracts/
+  task-escrow/      # Soroban escrow contract + tests (own workspace)
 docs/               # Architecture, roadmap, contributor guides
 .wave/              # Drips Wave issue backlog and process notes
 ```
 
 ## Status
 
-**Bootstrapping.** The workspace compiles and the domain model is being
-defined. There is no end-to-end robot-to-chain flow yet. See the
+**Working vertical slice.** The following are implemented and tested:
+
+- `bridge-core`: validated domain types, the task state machine, `Transport` /
+  `Settlement` / `Clock` traits, mocks, and the `BridgeNode` driver
+  (accept → execute → prove → release/refund).
+- `contracts/task-escrow`: a Soroban escrow with requester/executor auth,
+  deadlines, proof digests, TTL bumps, release/refund and unit tests.
+- `bridge-node --demo`: runs the full lifecycle with in-memory collaborators.
+
+Still to come: the `rclrs` ROS 2 transport, a live Soroban settlement client in
+`stellar-bridge`, and a testnet end-to-end run. See the
 [roadmap](docs/roadmap.md) and the open
-[Stellar Wave issues](../../issues?q=is%3Aissue+label%3A%22Stellar+Wave%22).
+[Stellar Wave issues](https://github.com/Primex-tech-labs/stellar-ros-bridge/issues?q=is%3Aissue+label%3A%22Stellar+Wave%22).
 
 ## Getting started
 
 Prerequisites:
 
 - Rust (see `rust-toolchain.toml` — installed automatically by rustup)
-- ROS 2 (Jazzy or newer) sourced in your environment, for the `ros-bridge` crate
-- A Stellar testnet account and funded key for integration work (see
-  `docs/architecture.md#local-development`)
+- ROS 2 (Jazzy or newer) only when working on the `rclrs` transport (not
+  implemented yet)
+- A Stellar testnet account and funded key for the live settlement client (not
+  implemented yet; the included escrow tests run offline)
 
 ```bash
 git clone https://github.com/Primex-tech-labs/stellar-ros-bridge
 cd stellar-ros-bridge
 cargo build --workspace
 cargo test --workspace
+
+# Run the lifecycle once with an in-memory transport and settlement:
+cargo run -p bridge-node -- --demo
+
+# Contract tests (no Stellar network required):
+cargo test --manifest-path contracts/task-escrow/Cargo.toml
 ```
 
 ## Contributing

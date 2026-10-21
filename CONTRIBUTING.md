@@ -76,7 +76,7 @@ of feedback. Reviews may cover design, error handling, and on-chain safety.
 ## Security
 
 Do **not** open a public issue for vulnerabilities. Contact the maintainers
-privately (see `SECURITY.md` once published) so a fix can be prepared first.
+privately (see `SECURITY.md`) so a fix can be prepared first.
 
 ## License
 

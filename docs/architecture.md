@@ -76,29 +76,30 @@ pub enum TaskState {
 }
 ```
 
-> The exact types are defined by the `Define the bridge-core domain model`
-> issue and will move from draft to frozen once merged.
+> These types are implemented in `crates/bridge-core/src/types.rs` with
+> validation, serde round-trip tests and lifecycle tests.
 
-## Settlement contract (draft interface)
+## Settlement contract (implemented)
 
-A single Soroban `TaskEscrow` contract is planned. Indicative entry points:
+`contracts/task-escrow` implements the escrow. Entry points:
 
 ```rust
-fn create_task(env, requester, capability, reward, deadline) -> TaskId;
+fn create_task(env, requester, capability, token, amount, deadline) -> Result<TaskId, Error>;
 fn accept_task(env, task_id, executor) -> Result<(), Error>;
-fn submit_proof(env, task_id, proof) -> Result<(), Error>;
+fn submit_proof(env, task_id, executor, digest) -> Result<(), Error>;
 fn release(env, task_id) -> Result<(), Error>;
-fn refund(env, task_id) -> Result<(), Error>;   // deadline passed, no valid proof
-fn dispute(env, task_id) -> Result<(), Error>;  // raises for maintainer review
+fn refund(env, task_id) -> Result<(), Error>;   // deadline passed
+fn get_task(env, task_id) -> Option<Task>;
 ```
 
-Safety invariants the contract must uphold (these become test cases):
+Safety invariants, covered by `contracts/task-escrow/src/test.rs`:
 
 1. Funds can leave escrow exactly once, via `release` **or** `refund` — never both.
-2. `release` requires a proof whose signer is the assigned executor.
-3. `refund` only succeeds after `deadline`.
-4. Reentrancy is impossible (Soroban execution model) but state writes must be
-   ordered so no path observes a half-updated task.
+2. Only the accepted executor can submit a proof, and only before `deadline`.
+3. `release` requires a stored proof; the requester authorizes it.
+4. `refund` only succeeds after `deadline` and is requester-authorized.
+5. State writes happen before token transfers, and persistent entries are
+   TTL-bumped on every read/write.
 
 ## Identity & keys
 
@@ -113,8 +114,9 @@ Safety invariants the contract must uphold (these become test cases):
 2. For ROS work: install ROS 2 Jazzy and `source /opt/ros/jazzy/setup.bash`.
 3. For Stellar work: create a testnet account and fund it via friendbot; put
    the secret in an environment variable, e.g. `STELLAR_SECRET` (see `.env.example`).
-4. `cargo build` builds the non-ROS crates; `cargo build -p ros-bridge`
-   additionally requires a sourced ROS 2 environment.
+4. `cargo build --workspace` and `cargo test --workspace` run offline. The
+   `ros` feature is still a placeholder; the rclrs transport will require a
+   sourced ROS 2 environment when it lands.
 
 ## Cross-cutting concerns
 
