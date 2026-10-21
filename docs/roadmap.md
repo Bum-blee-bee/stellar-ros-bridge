@@ -43,13 +43,13 @@ the full create/accept/proof/release flow was run on testnet (contract
 - [x] `rosbridge` JSON-over-WebSocket transport (portable, default feature)
 - [x] `rclrs` transport behind the `ros` feature (dynamic String messages)
 - [x] CI job that builds/tests `ros-bridge --features ros` under ROS 2 Jazzy
-- [ ] Example robot package that advertises a capability and completes a task
-- [ ] Robot-specific `TaskExecutor` implementations
+- [x] Example robot package that advertises a capability and completes a task
+- [x] Robot-specific `TaskExecutor` implementations
 
 The `rosbridge` transport is tested against a local mock WebSocket server but
-not exercised against a real ROS 2 rosbridge deployment here. The `rclrs` code
-has not been compiled locally because ROS 2 is unavailable in this environment;
-only the CI job verifies it.
+not exercised against a real ROS 2 rosbridge deployment here. The `rclrs`
+transport and `native_robot` example compile/test under Jazzy in CI; no ROS
+runtime is available locally.
 
 ## M4 - Hardening
 

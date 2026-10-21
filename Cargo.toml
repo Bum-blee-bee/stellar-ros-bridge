@@ -5,6 +5,7 @@ members = [
     "crates/ros-bridge",
     "crates/stellar-bridge",
     "crates/bridge-node",
+    "crates/example-robot",
 ]
 default-members = [
     "crates/bridge-core",

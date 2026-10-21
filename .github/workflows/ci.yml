@@ -69,4 +69,5 @@ jobs:
         run: |
           source /opt/ros/jazzy/setup.bash
           cargo build -p ros-bridge --features ros
+          cargo build -p ros-bridge --features ros --examples
           cargo test -p ros-bridge --features ros --lib

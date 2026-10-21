@@ -676,6 +676,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "example-robot"
+version = "0.1.0"
+dependencies = [
+ "bridge-core",
+ "ros-bridge",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
 name = "fastrand"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

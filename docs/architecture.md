@@ -12,6 +12,7 @@ so heavy external dependencies (ROS 2 and Stellar RPC) live only where needed.
 | `ros-bridge` | Implements `Transport` using either rosbridge_suite JSON-over-WebSocket (default) or `rclrs` (`ros` feature). | `tungstenite`; `rclrs` + ROS 2 Jazzy when enabled |
 | `stellar-bridge` | Implements `Settlement` against the TaskEscrow contract using Stellar RPC and Soroban transactions. | `soroban-client` 0.6 / `reqwest` / `stellar-xdr` |
 | `bridge-node` | Runtime binary. Wires a `Transport` to a `Settlement`, runs the task lifecycle, serves health endpoints. | all of the above |
+| `example-robot` | `TaskExecutor` implementation and robot-side demo: capability validation, telemetry digest, proof construction. | `sha2` |
 
 The key design rule: **`bridge-core` never depends on ROS or Stellar.** Both
 integrations are behind traits, which keeps the lifecycle unit-testable with
@@ -177,6 +178,21 @@ The contract uses `require_auth` on the actor named by each entry point. One
 
 `submit_proof` also checks that the proof's `signer` matches the settlement
 account before sending the transaction.
+
+### Example robot
+
+`crates/example-robot` supplies `SimulatedRobot`, a `TaskExecutor` that:
+
+- rejects capabilities the robot did not advertise;
+- hashes `task.id`, capability and params into a 32-byte SHA-256 digest;
+- returns a proof for the executor identity (with an explicitly empty signature,
+  so simulated proofs cannot be mistaken for production attestations).
+
+`cargo run -p example-robot --bin simulated-robot` drives the complete
+`BridgeNode` lifecycle with the simulated robot and prints the settled task and
+proof digest. `crates/ros-bridge/examples/native_robot.rs` is the native ROS 2
+counterpart: it advertises a capability and executes incoming tasks, and is
+compiled under Jazzy in the `ros` CI job.
 
 ### Verified testnet deployment
 

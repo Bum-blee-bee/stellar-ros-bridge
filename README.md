@@ -81,6 +81,10 @@ Locally implemented and tested without ROS or a live network:
 - `contracts/task-escrow`: a Soroban escrow with requester/executor auth,
   deadlines, proof digests, TTL bumps, release/refund and unit tests.
 - `bridge-node --demo`: runs the full lifecycle with in-memory collaborators.
+- `example-robot`: a `TaskExecutor` that validates capabilities and produces a
+  deterministic SHA-256 telemetry digest, plus a runnable robot-side demo
+  (`cargo run -p example-robot --bin simulated-robot`). A native `rclrs`
+  example node is compiled in the ROS CI job.
 - `ros-bridge` `rosbridge` transport: JSON-over-WebSocket rosbridge_suite
   protocol on the configured capabilities/tasks/proofs topics. It compiles on
   every platform and is tested against a local rosbridge-style WebSocket server
@@ -92,16 +96,15 @@ Locally implemented and tested without ROS or a live network:
   `create -> accept -> proof -> release` lifecycle has been run against the
   testnet TaskEscrow (see [docs/architecture.md](docs/architecture.md#verified-testnet-deployment)).
 
-Implemented but **not locally compiled/verified**:
+CI-verified only:
 
-- `ros-bridge` `rclrs` transport behind `--features ros`, using dynamic
-  `std_msgs/msg/String` messages. It requires a sourced ROS 2 Jazzy environment
-  and is built in the CI `ros` job only.
+- `ros-bridge` `rclrs` transport and the `native_robot` example, behind
+  `--features ros`. They compile and test under ROS 2 Jazzy in CI; no ROS
+  runtime is available in this development environment, so the live graph was
+  not exercised here.
 
 Still to come:
 
-- A robot-specific `TaskExecutor` (the transports deliberately do not fake
-  execution; the default executor returns an actionable error).
 - Live wiring of a transport and the settlement client into `bridge-node`
   beyond the in-memory demo; a local Soroban sandbox test.
 - Dispute handling and the M4 hardening work.
@@ -125,6 +128,9 @@ cargo test --workspace
 
 # Run the lifecycle once with an in-memory transport and settlement:
 cargo run -p bridge-node -- --demo
+
+# Run the simulated robot-side lifecycle (validate, execute, prove, settle):
+cargo run -p example-robot --bin simulated-robot
 
 # Contract tests (no Stellar network required):
 cargo test --manifest-path contracts/task-escrow/Cargo.toml
