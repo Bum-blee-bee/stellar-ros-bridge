@@ -66,7 +66,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         tasks_topic = %config.tasks_topic,
         proofs_topic = %config.proofs_topic,
         ros_domain_id = config.ros_domain_id,
-        "Stellar ROS Bridge configuration loaded (ROS transport not enabled)"
+        "Stellar ROS Bridge configuration loaded (live transports are not wired into this binary)"
     );
 
     println!("stellar-ros-bridge {}", bridge_node::VERSION);

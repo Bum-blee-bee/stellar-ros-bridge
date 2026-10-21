@@ -49,20 +49,24 @@ jobs:
           SOROBAN_SDK_BUILD_SYSTEM_SUPPORTS_SPEC_SHAKING_V2: "1"
         run: cargo build --release --target wasm32v1-none
 
-  # ROS-facing crates need a ROS 2 environment. This job is present so the
-  # pipeline is ready for it, but is disabled until the rclrs transport lands.
+  # The rclrs transport can only be compiled with a sourced ROS 2 environment.
+  # This job is the only place that verifies that code path; it has not been
+  # run locally in an environment without ROS 2.
   ros:
-    name: ros (ROS 2 Jazzy)
+    name: ros (ROS 2 Jazzy, rclrs)
     runs-on: ubuntu-latest
-    if: false
     steps:
       - uses: actions/checkout@v4
       - uses: ros-tooling/setup-ros@v0.7
         with:
           required-ros-distributions: jazzy
       - uses: dtolnay/rust-toolchain@stable
-      - name: Build ros-bridge
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Build and test rclrs transport
         shell: bash
         run: |
           source /opt/ros/jazzy/setup.bash
           cargo build -p ros-bridge --features ros
+          cargo test -p ros-bridge --features ros --lib

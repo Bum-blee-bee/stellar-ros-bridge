@@ -3,7 +3,7 @@
 This is a phased plan. Each milestone lists the outcome, not a date. Work is
 sliced into Wave-sized issues in `.wave/issues.md`.
 
-## M0 — Foundation (done)
+## M0 - Foundation (done)
 
 **Outcome:** a compiling workspace with a stable domain model and CI.
 
@@ -11,32 +11,47 @@ sliced into Wave-sized issues in `.wave/issues.md`.
 - [x] Repository scaffolding, CI (fmt/clippy/test), label + issue process
 - [x] Documented architecture and local dev setup
 
-## M1 — Task lifecycle off-chain
+## M1 - Task lifecycle off-chain (done)
 
-**Outcome:** the whole task lifecycle works with mocks — no chain, no robot.
+**Outcome:** the whole task lifecycle works with mocks - no chain, no robot.
 
 - [x] `Transport` and `Settlement` traits
-- [x] `bridge-node` state machine (`Announced → … → Settled`) with unit tests
+- [x] `bridge-node` state machine (`Announced -> ... -> Settled`) with unit tests
 - [x] Mock transport + mock settlement used in integration tests
 
-## M2 — Stellar settlement
+## M2 - Stellar settlement
 
 **Outcome:** a task can be escrowed and released on **testnet**.
 
 - [x] `TaskEscrow` Soroban contract with the invariants from `architecture.md`
-- [ ] `stellar-bridge` client: create/accept/proof/release/refund
-- [ ] Testnet bootstrap script (account + friendbot + deploy)
+- [x] `stellar-bridge` client: create/accept/proof/release/refund/state
+- [x] Pure request-construction, status-parsing, and contract-error mapping tests
+- [x] Manual testnet smoke binary (`stellar-testnet-smoke`)
+- [x] End-to-end test against a live testnet deployment (manual smoke)
 - [ ] End-to-end test against a local Soroban sandbox
 
-## M3 — ROS 2 integration
+The client is implemented with `soroban-client` 0.6. Its offline tests pass, and
+the full create/accept/proof/release flow was run on testnet (contract
+`CD55XYVX5AXAJNKBKALP6AESUNA2NZHTWOCNK3QUW4EYHGTN4LIHS46X`; see
+`docs/architecture.md`). Live calls remain manual and are not part of
+`cargo test`.
+
+## M3 - ROS 2 integration
 
 **Outcome:** a real ROS 2 node drives the lifecycle.
 
-- [ ] `ros-bridge` `rclrs` transport for capability/task/proof topics
+- [x] `rosbridge` JSON-over-WebSocket transport (portable, default feature)
+- [x] `rclrs` transport behind the `ros` feature (dynamic String messages)
+- [x] CI job that builds/tests `ros-bridge --features ros` under ROS 2 Jazzy
 - [ ] Example robot package that advertises a capability and completes a task
-- [ ] CI job that builds `ros-bridge` under ROS 2 Jazzy
+- [ ] Robot-specific `TaskExecutor` implementations
 
-## M4 — Hardening
+The `rosbridge` transport is tested against a local mock WebSocket server but
+not exercised against a real ROS 2 rosbridge deployment here. The `rclrs` code
+has not been compiled locally because ROS 2 is unavailable in this environment;
+only the CI job verifies it.
+
+## M4 - Hardening
 
 **Outcome:** safe enough for a pilot fleet.
 
@@ -44,6 +59,10 @@ sliced into Wave-sized issues in `.wave/issues.md`.
 - [ ] Fuzz/negative tests for proof verification and escrow math
 - [ ] Observability: tracing spans, metrics, and a health endpoint
 - [ ] Threat model and security review checklist
+- [ ] Live wiring of transport + settlement into `bridge-node` (beyond demo)
+
+The basic health endpoint already exists; broader metrics and tracing spans
+remain.
 
 ## Non-goals (for now)
 
