@@ -6,7 +6,7 @@
 //!   [rosbridge_suite](https://github.com/RobotWebTools/rosbridge_suite) JSON
 //!   protocol over a WebSocket. It compiles on every platform and needs no ROS
 //!   installation in the build environment.
-//! * [`rclrs_transport::RclrsTransport`] (feature `ros`) uses `rclrs` and the
+//! * `rclrs_transport::RclrsTransport` (feature `ros`) uses `rclrs` and the
 //!   native ROS 2 graph. It requires a sourced ROS 2 Jazzy (or newer)
 //!   environment to compile.
 //!
