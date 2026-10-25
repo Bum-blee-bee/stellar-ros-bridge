@@ -20,6 +20,9 @@ Areas we consider security-sensitive:
 - Proof verification and settlement authorization.
 - Anything that could cause loss of funds or unauthorized task execution.
 
+See [`docs/threat-model.md`](docs/threat-model.md) for the assets, actors,
+trust boundaries, and mitigations we track.
+
 ## Handling secrets
 
 - Never commit `.env` files, secret keys, or seed phrases. `.env` is gitignored;
