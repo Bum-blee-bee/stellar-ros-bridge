@@ -3,7 +3,8 @@
 This document enumerates the assets, actors, trust boundaries, and failure modes
 of Stellar ROS Bridge before the project scales beyond a single robot and a
 single escrow contract. It is a living document: update it when an architecture
-decision ([`docs/adr/`](adr/README.md)) or contract interface changes.
+decision (tracked in [#63](https://github.com/Primex-tech-labs/stellar-ros-bridge/issues/63))
+or contract interface changes.
 
 - **Scope:** `crates/` (bridge core, ROS transport, Stellar settlement, node) and
   `contracts/task-escrow`.
@@ -170,8 +171,8 @@ mitigations:
 
 ## Review process
 
-- Re-review this document when a change crosses a trust boundary (see the ADR
-  criteria in [`docs/adr/README.md`](adr/README.md)).
+- Re-review this document when a change crosses a trust boundary (see the
+  architecture decisions tracked in [#63](https://github.com/Primex-tech-labs/stellar-ros-bridge/issues/63)).
 - Every new threat needs a mitigation in the same PR, or an open issue linked in
   the **Status** column.
 - Security reports follow [`SECURITY.md`](../SECURITY.md); do not open a public
