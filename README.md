@@ -180,6 +180,12 @@ for requester and executor: the contract authorizes `create_task`, `release`,
 and `refund` as the requester, and `accept_task` / `submit_proof` as the
 executor.
 
+To deploy the escrow repeatably (build, `wasm-opt`, deploy, print the contract
+id), use `scripts/deploy-escrow.sh` or `scripts/deploy-escrow.ps1`. The signing
+key is read from the environment. See
+[`contracts/README.md`](contracts/README.md#deploy-the-escrow) for prerequisites
+and usage.
+
 Manual testnet smoke test (real network calls, never run by `cargo test`):
 
 ```bash

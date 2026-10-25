@@ -49,6 +49,34 @@ jobs:
           SOROBAN_SDK_BUILD_SYSTEM_SUPPORTS_SPEC_SHAKING_V2: "1"
         run: cargo build --release --target wasm32v1-none
 
+  # Verifies the repeatable deploy path without requiring a funded account:
+  # build for wasm32v1-none, optimize with Binaryen, and lint both scripts.
+  deploy-script:
+    name: deploy script (build + wasm-opt)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32v1-none
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: contracts/task-escrow
+      - name: Install wasm-opt
+        run: sudo apt-get update && sudo apt-get install -y binaryen
+      - name: Lint bash deploy script
+        run: bash -n scripts/deploy-escrow.sh
+      - name: Parse PowerShell deploy script
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            "scripts/deploy-escrow.ps1", [ref]$null, [ref]$errors
+          ) | Out-Null
+          if ($errors) { $errors | Format-List; exit 1 }
+      - name: Build and optimize escrow wasm
+        run: scripts/deploy-escrow.sh --build-only
+
   # The rclrs transport can only be compiled with a sourced ROS 2 environment.
   # This job is the only place that verifies that code path; it has not been
   # run locally in an environment without ROS 2.
