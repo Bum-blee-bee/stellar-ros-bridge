@@ -4,6 +4,16 @@ Stellar ROS Bridge sits between a ROS 2 robot graph and the Stellar network.
 It is split into small crates so the domain logic stays pure and testable, and
 so heavy external dependencies (ROS 2 and Stellar RPC) live only where needed.
 
+## Architecture decisions
+
+Significant design choices are recorded as architecture decision records in
+[`docs/adr/`](adr/README.md). Each ADR states the context, the decision, and the
+trade-offs so the reasoning survives beyond the code.
+
+| ADR | Decision | Status |
+| --- | --- | --- |
+| [ADR-0001](adr/ADR-0001-crate-split.md) | Split the bridge into `bridge-core`, `ros-bridge`, `stellar-bridge`, and `bridge-node` (plus `example-robot`) | Accepted |
+
 ## Crates
 
 | Crate | Responsibility | External deps |
