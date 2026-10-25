@@ -16,6 +16,27 @@ Closes #
 - [ ] Documentation
 - [ ] Tests / tooling
 
+## Security review
+
+<!--
+Complete this section when the PR touches signing, key handling, transaction
+construction, authorization, replay protection, escrow/settlement logic,
+storage, or network I/O. Otherwise mark N/A.
+-->
+
+- [ ] **Key handling:** secrets and signing keys are never logged, exposed in
+      telemetry, or committed; keys are only read from the documented config.
+- [ ] **Replay:** state-changing operations cannot be replayed (sequence
+      numbers, nonces, timestamps, or ids are checked; retries are idempotent).
+- [ ] **Authorization:** every state-changing path verifies the correct
+      signer/role (requester, executor, or admin) before mutating state.
+- [ ] **Escrow invariants:** funds can leave escrow only once, release and
+      refund remain mutually exclusive, and proofs cannot be forged or reused.
+- [ ] **Failure paths:** timeouts, retries, and partial writes cannot
+      double-spend or leave inconsistent state.
+- [ ] **Input/SSRF:** new inputs are validated and untrusted URLs or redirect
+      targets remain behind the network guard.
+
 ## How it was verified
 
 <!-- Paste the commands you ran and the relevant output. -->
