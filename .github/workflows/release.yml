@@ -91,13 +91,19 @@ jobs:
           name: release-artifacts
           path: dist
 
-      - name: Create release
+      - name: Create or update release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh release create "${RELEASE_TAG}" dist/* \
-            --repo "${GITHUB_REPOSITORY}" \
-            --title "Stellar ROS Bridge ${RELEASE_TAG}" \
-            --verify-tag \
-            --generate-notes
+          if gh release view "${RELEASE_TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release upload "${RELEASE_TAG}" dist/* \
+              --repo "${GITHUB_REPOSITORY}" \
+              --clobber
+          else
+            gh release create "${RELEASE_TAG}" dist/* \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "Stellar ROS Bridge ${RELEASE_TAG}" \
+              --verify-tag \
+              --generate-notes
+          fi
