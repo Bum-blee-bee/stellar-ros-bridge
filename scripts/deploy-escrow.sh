@@ -55,6 +55,9 @@ if command -v rustup >/dev/null 2>&1; then
   fi
 fi
 
+# soroban-sdk 28 needs this build-system flag; the CI contract job sets it too.
+export SOROBAN_SDK_BUILD_SYSTEM_SUPPORTS_SPEC_SHAKING_V2=1
+
 echo "building TaskEscrow for $TARGET"
 cargo build --manifest-path "$MANIFEST" --release --target "$TARGET" --locked
 

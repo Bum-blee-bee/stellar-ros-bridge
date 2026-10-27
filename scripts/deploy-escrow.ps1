@@ -61,6 +61,9 @@ if ($Rustup) {
     }
 }
 
+# soroban-sdk 28 needs this build-system flag; the CI contract job sets it too.
+$env:SOROBAN_SDK_BUILD_SYSTEM_SUPPORTS_SPEC_SHAKING_V2 = "1"
+
 Write-Host "building TaskEscrow for $Target"
 & cargo build --manifest-path $Manifest --release --target $Target --locked
 if ($LASTEXITCODE -ne 0) { Fail "cargo build failed" }
