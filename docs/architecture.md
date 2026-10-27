@@ -252,6 +252,9 @@ and links it only on `windows-gnu`. Other platforms are unaffected.
 
 ## Cross-cutting concerns
 
+- **Security:** assets, actors, and mitigations are catalogued in
+  [`docs/threat-model.md`](threat-model.md). Signing keys are never serialized,
+  and the contract authorizes every state transition with `require_auth`.
 - **Observability:** structured `tracing` spans keyed by `TaskId`; the runtime
   health endpoints remain in `bridge-node`.
 - **Time:** task deadlines are ledger time, not wall clock, to avoid skew.
