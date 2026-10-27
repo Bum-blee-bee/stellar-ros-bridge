@@ -19,3 +19,6 @@ thiserror = { workspace = true }
 soroban-client = "0.6"
 stellar-strkey = "0.0.15"
 tokio = { version = "1", features = ["rt-multi-thread", "time", "net", "io-util"] }
+
+[package.metadata.docs.rs]
+all-features = true

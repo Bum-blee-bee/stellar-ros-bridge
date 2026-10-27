@@ -3,7 +3,7 @@
 //! This crate is deliberately small: it shows how an application turns a task
 //! into a proof. The simulated robot validates the advertised capability and
 //! hashes the task's capability/params into a 32-byte telemetry digest. A real
-//! robot would replace [`SimulatedRobot::execute`] with its own SDK call and
+//! robot would replace `TaskExecutor::execute` with its own SDK call and
 //! sign the telemetry with the robot key.
 
 #![forbid(unsafe_code)]

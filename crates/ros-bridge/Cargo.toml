@@ -8,11 +8,8 @@ repository.workspace = true
 rust-version.workspace = true
 
 [features]
-# `rosbridge` is the portable JSON-over-WebSocket transport. It needs no ROS
-# installation to compile, so it is enabled by default.
 default = ["rosbridge"]
 rosbridge = ["dep:tungstenite"]
-# `ros` pulls in rclrs and requires a sourced ROS 2 (Jazzy+) environment.
 ros = ["dep:rclrs"]
 
 [dependencies]
@@ -22,3 +19,6 @@ serde_json = { workspace = true }
 serde_yaml = "0.9"
 tungstenite = { version = "0.29", optional = true }
 rclrs = { version = "0.8", optional = true }
+
+[package.metadata.docs.rs]
+all-features = true
